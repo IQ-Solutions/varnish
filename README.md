@@ -65,6 +65,7 @@ Supported tags and respective `Dockerfile` links:
 | `VARNISH_KEEP_ALL_COOKIES`                 |                            |                                                 |
 | `VARNISH_KEEP_ALL_PARAMS`                  |                            |                                                 |
 | `VARNISH_IMPORT_MODULES`                   |                            | Separated by comma                              |
+| `VARNISH_HTPASSWD_FILE`                    |                            | Will need to be bind-mounted into place         |
 | `VARNISH_MOBILE_DISABLE_CASH`              |                            |                                                 |
 | `VARNISH_MOBILE_SEPARATE_CASH`             |                            |                                                 |
 | `VARNISH_MOBILE_USER_AGENT`                |                            | See default value below                         |
@@ -193,6 +194,7 @@ VARNISH_STORAGE_CONDITION='beresp.http.x-cache-bin = "secondary"'
 | [tcp](https://github.com/varnish/varnish-modules/blob/master/docs/vmod_tcp.rst)             | latest  |          |
 | [var](https://github.com/varnish/varnish-modules/blob/master/docs/vmod_var.rst)             | latest  |          |
 | [xkey](https://github.com/varnish/varnish-modules/blob/master/docs/vmod_xkey.rst)           | latest  |          |
+| [basicauth](https://git.gnu.org.ua/vmod-basicauth.git)                                      | 1.6     | ✓        |
 | bodyaccess                                                                                  | latest  |          |
 
 Modules can be imported as `$VARNISH_IMPORT_MODULES=xkey,softpurge`.
@@ -220,6 +222,11 @@ We identify client's two-letter country code ([ISO 3166](https://en.wikipedia.or
 
 
 If we see CloudFlare country code header we use it instead.
+
+### Basic Authentication
+
+In order to add HTTP basic authentication an htpasswd file should be bind mounted into place and then the `$VARNISH_HTPASSWD_FILE` environment variable
+set to its path.
 
 ### Currency
 

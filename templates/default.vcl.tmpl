@@ -4,11 +4,26 @@ include "includes/backend.vcl";
 
 import std;
 import geoip;
+import basicauth;
 
 sub vcl_recv {
+    {{ if getenv "VARNISH_HTPASSWD_FILE" }}
+    if (!basicauth.match("{{ getenv "VARNISH_HTPASSWD_FILE" }}",  req.http.Authorization)) {
+        return(synth(401, "Authentication required"));
+    }
+    {{ end }}
+    
     if (req.method == "GET" && req.url == "/.vchealthz") {
         return (synth(204, "OK"));
     }
+}
+
+sub vcl_synth {
+    {{ if getenv "VARNISH_HTPASSWD_FILE" }}
+    if (resp.status == 401) {
+        set resp.http.WWW-Authenticate = "Basic";
+    }
+    {{ end }}
 }
 
 {{ if getenv "VARNISH_IMPORT_MODULES" }}

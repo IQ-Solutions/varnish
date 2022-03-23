@@ -131,6 +131,14 @@ RUN set -ex; \
         make check; \
     fi; \
     \
+#   Install basicauth vmod
+    wget -qO- https://git.gnu.org.ua/vmod-basicauth.git/snapshot/vmod-basicauth-release-1.6.tar.gz | tar xz -C /tmp/; \
+    cd /tmp/vmod-basicauth-release-1.6; \
+    ./bootstrap; \
+    ./configure; \
+    make; \
+    make install; \
+    \
     # we're using 6.0 branch instead of releases https://github.com/varnish/varnish-modules/issues/144
     git clone --depth 1 -b 6.0 --single-branch https://github.com/varnish/varnish-modules /tmp/varnish-modules; \
     cd /tmp/varnish-modules; \
